@@ -23,7 +23,7 @@
     <lightning-layout>
         <template for:each={todos} for:item="todo">
             <lightning-layout-item key={todo.Id} padding="around-small">
-                <c-todo todo={todo}></c-todo>
+                <c-todo todo={todo} onmarkcomplete={performRefresh}></c-todo>
             </lightning-layout-item>
         </template>
     </lightning-layout>

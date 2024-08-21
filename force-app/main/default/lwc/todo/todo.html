@@ -1,5 +1,14 @@
 <template>
     <lightning-card title={todo.Name}>
+        <template lwc:if={showMarkCompleteButton}>
+            <div slot="actions">
+                <lightning-button
+                    onclick={handleMarkComplete}
+                    class="slds-m-left_medium"
+                    label="Mark Complete"
+                ></lightning-button>
+            </div>
+        </template>
         <div class="slds-p-horizontal_small">
             <p class={statusClass}>{status}</p>
             <p>Due by {todo.DueDate__c}</p>

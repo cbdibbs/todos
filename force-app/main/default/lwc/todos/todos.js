@@ -1,4 +1,5 @@
 import {wire, LightningElement} from 'lwc';
+import {refreshApex} from '@salesforce/apex';
 import getTodos from '@salesforce/apex/TodoService.getTodos';
 
 export default class Todos extends LightningElement {
@@ -12,5 +13,8 @@ export default class Todos extends LightningElement {
     get countIncompleteTodos() {
         return this.todos?.filter(todo => !todo.IsComplete__c).length;
     }
-}
 
+    performRefresh() {
+        refreshApex(this.todosResult);
+    }
+}
