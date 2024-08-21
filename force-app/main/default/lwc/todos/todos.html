@@ -12,6 +12,7 @@
                                 <h1>
                                     <span class="slds-page-header__title" title="My Todos">My Todos</span>
                                 </h1>
+                                <p>Number Incomplete: {countIncompleteTodos}</p>
                             </div>
                         </div>
                     </div>
@@ -19,8 +20,11 @@
             </div>
         </div>
     </div>
-    <template for:each={todos} for:item="todo">
-        <p key={todo.Name}>{todo.Name}</p>
-    </template>
+    <lightning-layout>
+        <template for:each={todos} for:item="todo">
+            <lightning-layout-item key={todo.Id} padding="around-small">
+                <c-todo todo={todo}></c-todo>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
 </template>
-

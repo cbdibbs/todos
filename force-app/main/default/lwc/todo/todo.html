@@ -1,0 +1,8 @@
+<template>
+    <lightning-card title={todo.Name}>
+        <div class="slds-p-horizontal_small">
+            <p class={statusClass}>{status}</p>
+            <p>Due by {todo.DueDate__c}</p>
+        </div>
+    </lightning-card>
+</template>

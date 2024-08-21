@@ -8,5 +8,9 @@ export default class Todos extends LightningElement {
     get todos() {
         return this.todosResult.data;
     }
+
+    get countIncompleteTodos() {
+        return this.todos?.filter(todo => !todo.IsComplete__c).length;
+    }
 }
 
