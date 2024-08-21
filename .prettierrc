@@ -1,0 +1,19 @@
+{
+  "plugins": ["prettier-plugin-apex"],
+  "trailingComma": "none",
+  "tabWidth": 4,
+  "printWidth": 120,
+  "bracketSpacing": false,
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "overrides": [
+    {
+      "files": "**/lwc/**/*.html",
+      "options": { "parser": "lwc" }
+    },
+    {
+      "files": "*.{cmp,page,component,auradoc}",
+      "options": { "parser": "html" }
+    }
+  ]
+}

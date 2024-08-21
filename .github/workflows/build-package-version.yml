@@ -1,0 +1,13 @@
+name: Build Package Version
+
+on:
+    push:
+        branches: ['main']
+        tags-ignore: ['**']
+    workflow_dispatch: # allow to be run from Actions tab
+
+jobs:
+    build-package-version:
+        name: Build Package Version
+        uses: thrivent/salesforce-package-common-workflows/.github/workflows/build-package-version.yml@v2
+        secrets: inherit

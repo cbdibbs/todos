@@ -1,0 +1,10 @@
+name: Prepare Package for Promotion
+
+on:
+    workflow_dispatch: # allow to be run from Actions tab
+
+jobs:
+    promotion-prep:
+        name: Prepare Package for Promotion
+        uses: thrivent/salesforce-package-common-workflows/.github/workflows/prepare-for-promotion.yml@v2
+        secrets: inherit

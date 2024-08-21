@@ -1,0 +1,77 @@
+name: Prep Repo 🎨
+
+on:
+    workflow_dispatch:
+        branches:
+            - main
+        inputs:
+            package-name:
+                description: 'Package Name'
+                required: true
+            package-prefix:
+                description: 'Package Prefix'
+                required: true
+jobs:
+    prep-repo:
+        name: Prep Repo 🎨
+        runs-on:
+            labels: [self-hosted, linux]
+            group: linux-runners
+        container:
+            image: ${{ vars.IMAGE_REGISTRY_PULL }}/enterprisecrmplatform/builders/salesforcebuilder:latest
+        env:
+            HOME: /root
+            DOCKER_CONFIG: /github/home/.docker
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.GHA_WORKFLOW_TOKEN }}
+
+            - name: Get DevHub Access Token 🔑
+              id: get-devhub-access-token
+              uses: thrivent/action-salesforce-oauth-login@v1
+              with:
+                  client_id: ${{ vars.SF_B2C_PROD_CLIENT_ID }}
+                  client_secret: ${{ secrets.SF_B2C_PROD_CLIENT_ID_SECRET }}
+                  instance_url: ${{ vars.SF_B2C_PROD_URL }}
+
+            - name: Log into Salesforce DevHub 🔓
+              run: |
+                  export SF_ACCESS_TOKEN=${{ steps.get-devhub-access-token.outputs.access_token }}
+                  sf org login access-token --instance-url ${{ vars.SF_B2C_PROD_URL }} --no-prompt --alias DevHub
+
+            - name: Update scratch def config 🧭
+              run: |
+                  jq '.orgName = "${{ inputs.package-name }}"' config/project-scratch-def.json > temp-project-scratch-def.json
+                  mv temp-project-scratch-def.json config/project-scratch-def.json
+
+            - name: Update Package Directory Name 📁
+              run: |
+                  mv force-app ${{ inputs.package-prefix }}
+
+            - name: Update Package SFDX Project Settings 📡
+              run: |
+                  jq '.packageDirectories[0].path = "${{ inputs.package-prefix }}" | .packageDirectories[0].package = "${{ inputs.package-name }}"' sfdx-project.json > temp-sfdx-project.json
+                  mv temp-sfdx-project.json sfdx-project.json
+
+            - name: Create Package 📦
+              run: |
+                  sf package create --name ${{ inputs.package-name }} --package-type Unlocked --path ${{ inputs.package-prefix }} --target-dev-hub DevHub
+
+            - name: Tweak SFDX Project Settings (post package creation) 📡
+              run: |
+                  jq '.packageDirectories[0] |= del(.versionName) | .packageDirectories[0] |= del(.versionDescription) | .packageDirectories[0].default = true | .packageDirectories[0].versionNumber = "1.0.0.NEXT"' sfdx-project.json > temp-sfdx-project.json
+                  mv temp-sfdx-project.json sfdx-project.json
+
+            - name: Configure Git 🎛️
+              run: |
+                  git config --global user.name 'github-actions[bot]'
+                  git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+            - name: Commit Changes 📝
+              run: |
+                  git add --all
+                  git commit -m "[skip ci] create package"
+                  git push origin || echo "No changes to push"

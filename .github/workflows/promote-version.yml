@@ -1,0 +1,11 @@
+name: Promote Package Version
+
+on:
+    release:
+        types: [released]
+
+jobs:
+    promote-version:
+        name: Promote Package Version
+        uses: thrivent/salesforce-package-common-workflows/.github/workflows/promote-version.yml@v2
+        secrets: inherit

@@ -1,0 +1,11 @@
+name: Pull Request CI Pipeline
+
+on:
+    pull_request:
+        branches: ['main']
+
+jobs:
+    unit-test:
+        name: Unit Test
+        uses: thrivent/salesforce-package-common-workflows/.github/workflows/unit-test.yml@v2
+        secrets: inherit

@@ -1,0 +1,19 @@
+target/
+/.vscode/
+.clover/
+.DS_Store
+.dccache
+node_modules
+coverage
+
+### SFDX ###
+/.sf/
+/.sfdx/
+/.working/
+package.xml
+jsconfig.json
+
+#Ignore all profiles
+#Profiles should be managed in the 'happy soup' repository: https://bitbucket.digital.thrivent.com/projects/CRM/repos/salesforcecrm-customer/browse
+*.profile-meta.xml
+!Admin.profile-meta.xml
