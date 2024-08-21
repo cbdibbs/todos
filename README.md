@@ -2,42 +2,76 @@
 
 [![Salesforce](https://img.shields.io/badge/salesforce-%230097D8?&style=for-the-badge&logo=salesforce&logoColor=white&Color=white)](https://img.shields.io)
 
-> A template repository to give a starting point for new unlocked package repositories.
+## Problem Statement
 
-## How To Use
+Our team is working on a project to build a todo list app for Salesforce. We have already created a custom object called `Todo__c` with the following fields: `Name`, `DueDate__c`, `IsComplete__c`. We need your help to build the frontend of the app using LWC.
 
-1. Create the new package repository using this repo as the [template repository](https://docs.github.com/en/enterprise-server@3.8/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template). The new package name should be used as the repo name.
+We have already created a simple LWC component called `todos` that displays a hardcoded list of todos. Please follow the setup steps below and make sure you can navigate to the `Todos` app.
 
-> NOTE: Be sure to create it within the `thrivent` github organization.
+## Setup
 
-2. Add the [appropriate github team](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/managing-teams-and-people-with-access-to-your-repository) as an admin to the new repository.
+1. Clone this repository
+2. Run `sf org create scratch -d -f config/project-scratch-def.json -v devhub` to create a scratch org
+3. Run `sf project deploy start` to deploy the source to your scratch org
+4. Run `sf org open` to open the scratch org
+5. Navigate to the `Todos` app
+6. You should see a list of todos that looks like this:
 
-3. Add the [required github variables/secrets](https://thrivent.atlassian.net/wiki/x/z4CmIQ) to the new repo.
+    ![Todos](/docs/assets/Start.jpeg?raw=true)
 
-4. Run the [Prep](./.github/workflows/prep-repo.yml) github action workflow **in the new repository**. This workflow will require the package name as well as the package prefix. A variety of tasks will be completed in this workflow
+## 1. Fetch todos from database
 
-    - Update the [scratch def](./config/project-scratch-def.json) to have future scratch orgs created with unlocked package name.
+The first new requirement is that we fetch our todos from the database instead of using the hardcoded list. We have already created a placeholder Apex method for you to use. The method is called `getTodos` and it is located in the `TodoService` class.
 
-    - Update the [sfdx project](./sfdx-project.json) file to use the package prefix and package name provided.
+<details>
+  <summary>Hints</summary>
 
-    - Rename the `force-app` directory to the package prefix.
+-   Use the `@wire` decorator to call the `getTodos` method
 
-    - Create the package within the devhub.
+If you get stuck, go ahead and check out the branch `feature/data-fetching` to see the solution and move on to the next step.
 
-    - Tweak the [sfdx project](./sfdx-project.json) file to remove unncessary properties added during package creation and set the semantic version to `1.0.0.NEXT`
+</details>
 
-5. It is highly recommended to adjust the [CODEOWNERS](./.github/CODEOWNERS) file to have the team(s) that owns the unlocked package become the code owner. More info can be found [here](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
+## 2. Display each todo as a card
 
-6. The new repository needs to be imported into the static analysis tools. These tools include:
+We finally heard from our designers, and they want to display each todo as shown in the screenshot below. Please follow these requirements to complete this step:
 
-   -   [Snyk](https://thrivent.atlassian.net/wiki/x/f4BrHQ)
-   -   [Sonarcloud](https://thrivent.atlassian.net/wiki/x/MoobF)
-  
-7. (Recommended) Set [General Repository Settings](https://thrivent.atlassian.net/wiki/x/5QhFH)
+-   Each todo should be displayed as a card
+-   The card should have a title, due date, and the text either 'Complete' or 'Incomplete' based on the `IsComplete__c` field
+-   If the todo is complete, the 'Complete' text should be green. If it is incomplete, the 'Incomplete' text should be red
+-   The number of incomplete todos should be added to the page header as shown
 
-8. (Recommended) Set [Branch Protection Rules](https://thrivent.atlassian.net/wiki/x/wYhRH) 
+<details>
+  <summary>Hints</summary>
 
-9. Happy programming!
+-   It may be helpful to create a new child component to display each todo as a card
+-   You can use the `lightning-card` component to create the card
+-   Use getters to calculate things like the number of incomplete todos, as well as the text and color for the 'Complete' or 'Incomplete' text
 
-> NOTE: After the initial workflow run it is possible to delete the [Prep](./.github/workflows/prep-repo.yml) file. The file should never have to be ran again.
+If you get stuck, go ahead and check out the branch `feature/layout` to see the solution and move on to the next step.
 
+</details>
+
+![Todos](/docs/assets/Layout.jpeg?raw=true)
+
+## 3. Let users mark each todo as complete
+
+The last new feature we need to add is the ability for users to mark each todo as complete. Please follow these requirements to complete this step:
+
+-   Add a button to each card that says 'Mark Complete'
+-   When the button is clicked, the `IsComplete__c` field should be updated to `true`
+-   The page should automatically update to reflect the change
+
+<details>
+  <summary>Hints</summary>
+
+-   Use the `lightning-button` component to create the 'Mark Complete' button
+-   Use the `updateRecord` wire adapter to update the `IsComplete__c` field
+-   Dispatch a custom event when the todo is marked complete to trigger a refresh of the todos
+-   Use the `refreshApex` function to refresh the todos
+
+If you get stuck, go ahead and check out the branch `feature/markComplete` to see the final solution.
+
+</details>
+
+![Mark Complete](/docs/assets/MarkComplete.gif?raw=true)
