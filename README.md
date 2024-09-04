@@ -6,7 +6,7 @@
 
 Our team is working on a project to build a todo list app for Salesforce. We have already created a custom object called `Todo__c` with the following fields: `Name`, `DueDate__c`, `IsComplete__c`. We need your help to build the frontend of the app using LWC.
 
-We have already created a simple LWC component called `todos` that displays a hardcoded list of todos. Please follow the setup steps below and make sure you can navigate to the `Todos` app.
+We have already created a simple LWC component called `todos` that displays an unformatted list of todos. Please follow the setup steps below and make sure you can navigate to the `Todos` app.
 
 ## Setup
 
@@ -15,24 +15,11 @@ We have already created a simple LWC component called `todos` that displays a ha
 3. Run `sf project deploy start` to deploy the source to your scratch org
 4. Run `sf org open` to open the scratch org
 5. Navigate to the `Todos` app
-6. You should see a list of todos that looks like this:
+6. You should see a list of todos that looks similar to this:
 
     ![Todos](/docs/assets/Start.jpeg?raw=true)
 
-## 1. Fetch todos from database
-
-The first new requirement is that we fetch our todos from the database instead of using the hardcoded list. We have already created a placeholder Apex method for you to use. The method is called `getTodos` and it is located in the `TodoService` class.
-
-<details>
-  <summary>Hints</summary>
-
--   Use the `@wire` decorator to call the `getTodos` method
-
-If you get stuck, go ahead and check out the branch `feature/data-fetching` to see the solution and move on to the next step.
-
-</details>
-
-## 2. Display each todo as a card
+## 1. Display each todo as a card
 
 We finally heard from our designers, and they want to display each todo as shown in the screenshot below. Please follow these requirements to complete this step:
 
@@ -54,7 +41,7 @@ If you get stuck, go ahead and check out the branch `feature/layout` to see the 
 
 ![Todos](/docs/assets/Layout.jpeg?raw=true)
 
-## 3. Let users mark each todo as complete
+## 2. Let users mark each todo as complete
 
 The last new feature we need to add is the ability for users to mark each todo as complete. Please follow these requirements to complete this step:
 
